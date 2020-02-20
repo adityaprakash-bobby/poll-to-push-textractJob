@@ -23,7 +23,7 @@ def lambda_handler(event, context):
             }
         },
         ReturnConsumedCapacity='TOTAL',
-        TableName='Music',
+        TableName='AmazonTextractSavedJobs',
     )
     
     return {
