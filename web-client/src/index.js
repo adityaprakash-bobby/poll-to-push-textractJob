@@ -27,7 +27,8 @@ class UploadFileComponent extends React.Component {
             inputFile: '',
             inputFilePath: '',
             imageBase64: '',
-            ws: null
+            ws: null,
+            textarctJSON: ''
         }
 
         this.handleInputFile = this.handleInputFile.bind(this);
@@ -101,6 +102,16 @@ class UploadFileComponent extends React.Component {
             connectInterval = setTimeout(this.check, Math.min(10000, that.timeout)); //call check function after timeout
         };
 
+        ws.onmessage = evt => {
+            // on receiving a message, add it to the list of messages
+            const message = JSON.parse(evt.data)
+            this.setState({
+                textarctJSON: message
+            })
+            console.log(message)
+        }
+    
+        
         // websocket onerror event listener
         ws.onerror = err => {
             console.error(
@@ -129,7 +140,7 @@ class UploadFileComponent extends React.Component {
                     </div>
                 </div>
                 
-                <ViewJSON websocket={this.state.ws} inputFilePath={this.state.inputFilePath} imageFile={this.state.imageFile} imageFileName={this.state.inputFileName}/>
+                <ViewJSON websocket={this.state.ws} inputFilePath={this.state.inputFilePath} imageFile={this.state.imageFile} imageFileName={this.state.inputFileName} textarctJSON={this.state.textarctJSON}/>
             </div>
         )
     };
@@ -222,8 +233,27 @@ class ViewJSON extends React.Component {
         }
 
     }
+    
+    getJsonFromBucket(key) {
+
+        let params_get = {
+            Key: key
+        }
+
+        bucket.getObject(params_get).promise()
+            .then((data) => { 
+                console.log(String.fromCharCode.apply(null, data.Body))
+                this.setState({
+                    json: String.fromCharCode.apply(null, data.Body)
+                });
+            })
+    }
 
     render() {
+        if (this.props.textarctJSON !== '') {
+            this.getJsonFromBucket(this.props.textarctJSON);
+        }
+
         return (
             <div>
                 <div className="split right">
@@ -235,6 +265,7 @@ class ViewJSON extends React.Component {
                     <button onClick={this.reset}>Clear</button>
                     {!this.state.s3Upload?<br />:<p>Object Key Uploaded: {this.state.s3ObjKey}</p>}
                     {this.state.jobId === ''?<br />:<p>Textract JobId Started: {this.state.jobId}</p>}
+                    {this.state.json === ''?<br />:<p>Textract JSON: {this.state.json}</p>}
                     </div>
                 </div>
             </div>
