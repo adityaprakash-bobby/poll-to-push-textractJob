@@ -10,18 +10,22 @@ def lambda_handler(event, context):
     # take note of the SNSFullAccessRole role ARN and AmazonTextractJob SNS Topic ARN and use them in the 
     # request of the Textract API
     print(event)
+    body = json.loads(event["body"])
+    bucket = body["bucket"]
+    key = body["objkey"]
+    
     client = boto3.client('textract')
     
     response = client.start_document_text_detection(
         DocumentLocation={
             'S3Object': {
-                'Bucket': 'test-lambda-tt',
-                'Name': 'docs/Profile.pdf',
+                'Bucket': bucket,
+                'Name': key,
                 # 'Version': 'string'
             }
         },
-        ClientRequestToken='string',
-        JobTag='Job' + 'docs_profile_png',
+        ClientRequestToken='Job' + key.replace('/', "_").replace('.', '_'),
+        JobTag='Job' + key.replace('/', "_").replace('.', '_'),
         NotificationChannel={
             'SNSTopicArn': 'arn:aws:sns:us-east-1:323226456632:AmazonTextractJob',
             'RoleArn': 'arn:aws:iam::323226456632:role/SNSFullAccessRole'
@@ -29,7 +33,7 @@ def lambda_handler(event, context):
     )
     
     job_id = response["JobId"]
-    
+    print(job_id)
     return {
         'statusCode': 200,
         'body': json.dumps(job_id),
@@ -37,6 +41,5 @@ def lambda_handler(event, context):
             "access-control-allow-origin": "*",
             "cache-control": "no-cache",
             "content-type": "application/json; charset=utf-8",
-            "vary": "Accept-Encoding"
         }
     }
