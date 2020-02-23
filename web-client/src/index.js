@@ -155,7 +155,14 @@ class UploadFileComponent extends React.Component {
                     </div>
                 </div>
                 
-                <ViewJSON websocket={this.state.ws} inputFilePath={this.state.inputFilePath} imageFile={this.state.imageFile} imageFileName={this.state.inputFileName} textarctJSON={this.state.textarctJSON} jsonData={this.state.jsonData}/>
+                <ViewJSON 
+                    websocket={this.state.ws} 
+                    inputFilePath={this.state.inputFilePath} 
+                    imageFile={this.state.imageFile} 
+                    imageFileName={this.state.inputFileName} 
+                    textarctJSON={this.state.textarctJSON} 
+                    jsonData={this.state.jsonData}
+                />
             </div>
         )
     };
@@ -263,7 +270,7 @@ class ViewJSON extends React.Component {
                     {!this.state.s3Upload?<br />:<p>Object Key Uploaded: {this.state.s3ObjKey}</p>}
                     {this.state.jobId === ''?<br />:<p>Textract JobId Started: {this.state.jobId}</p>}
                     {this.state.json === ''?<br />:<p>Textract JSON: {this.state.json}</p>}
-                    {this.props.jsonData === ''?<br />:<p>Textract JSON: {this.props.jsonData}</p>}
+                    {this.props.jsonData === ''?<br />:<pre>{this.props.jsonData}</pre>}
                     </div>
                 </div>
             </div>
