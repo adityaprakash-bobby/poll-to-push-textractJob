@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import AWS from 'aws-sdk';
+import AWS, { IoTThingsGraph } from 'aws-sdk';
 
 // API details
 const API_URL = "https://7q1i0pgrhj.execute-api.us-east-1.amazonaws.com/default/amazontextractcallasynctextract"
@@ -28,7 +28,8 @@ class UploadFileComponent extends React.Component {
             inputFilePath: '',
             imageBase64: '',
             ws: null,
-            textarctJSON: ''
+            textarctJSON: '',
+            jsonData: ''
         }
 
         this.handleInputFile = this.handleInputFile.bind(this);
@@ -108,6 +109,20 @@ class UploadFileComponent extends React.Component {
             this.setState({
                 textarctJSON: message
             })
+
+            let params_get = {
+                Key: message
+            }
+        
+            bucket.getObject(params_get).promise()
+                .then((data) => {
+                this.setState({
+                    jsonData: String.fromCharCode.apply(null, data.Body)
+                });
+                console.log(String.fromCharCode.apply(null, data.Body));
+                
+            });
+
             console.log(message)
         }
     
@@ -140,7 +155,7 @@ class UploadFileComponent extends React.Component {
                     </div>
                 </div>
                 
-                <ViewJSON websocket={this.state.ws} inputFilePath={this.state.inputFilePath} imageFile={this.state.imageFile} imageFileName={this.state.inputFileName} textarctJSON={this.state.textarctJSON}/>
+                <ViewJSON websocket={this.state.ws} inputFilePath={this.state.inputFilePath} imageFile={this.state.imageFile} imageFileName={this.state.inputFileName} textarctJSON={this.state.textarctJSON} jsonData={this.state.jsonData}/>
             </div>
         )
     };
@@ -199,11 +214,11 @@ class ViewJSON extends React.Component {
 
     makeDetection() {
        
-        if (!this.state.s3Upload || this.states3ObjKey === '') {
+        if (!this.state.s3Upload || this.state.s3ObjKey === '') {
             alert("Upload a valid file to S3 first.")
         } else {
             // fetch()
-            console.log("Chal ab karle detect")
+            console.log("Detecting text....")
             var postBody = {
                 bucket: 'test-lambda-tt',
                 objkey: this.state.s3ObjKey
@@ -233,27 +248,9 @@ class ViewJSON extends React.Component {
         }
 
     }
-    
-    getJsonFromBucket(key) {
-
-        let params_get = {
-            Key: key
-        }
-
-        bucket.getObject(params_get).promise()
-            .then((data) => { 
-                console.log(String.fromCharCode.apply(null, data.Body))
-                this.setState({
-                    json: String.fromCharCode.apply(null, data.Body)
-                });
-            })
-    }
 
     render() {
-        if (this.props.textarctJSON !== '') {
-            this.getJsonFromBucket(this.props.textarctJSON);
-        }
-
+    
         return (
             <div>
                 <div className="split right">
@@ -266,6 +263,7 @@ class ViewJSON extends React.Component {
                     {!this.state.s3Upload?<br />:<p>Object Key Uploaded: {this.state.s3ObjKey}</p>}
                     {this.state.jobId === ''?<br />:<p>Textract JobId Started: {this.state.jobId}</p>}
                     {this.state.json === ''?<br />:<p>Textract JSON: {this.state.json}</p>}
+                    {this.props.jsonData === ''?<br />:<p>Textract JSON: {this.props.jsonData}</p>}
                     </div>
                 </div>
             </div>
