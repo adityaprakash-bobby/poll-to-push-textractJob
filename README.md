@@ -1,4 +1,4 @@
-# poll-to-push-textractJob
+# poll-to-push-textract
 A react app to do aysynchronous text analysis/detection without polling for the asynchronous response from the Textract Application.
 
 ![solution_arch](https://raw.githubusercontent.com/adityaprakash-bobby/poll-to-push-textractJob/master/assets/solution_arch.png)
