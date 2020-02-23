@@ -270,7 +270,7 @@ class ViewJSON extends React.Component {
                     {!this.state.s3Upload?<br />:<p>Object Key Uploaded: {this.state.s3ObjKey}</p>}
                     {this.state.jobId === ''?<br />:<p>Textract JobId Started: {this.state.jobId}</p>}
                     {this.state.json === ''?<br />:<p>Textract JSON: {this.state.json}</p>}
-                    {this.props.jsonData === ''?<br />:<pre>{this.props.jsonData}</pre>}
+                    {this.props.jsonData === ''?<br />:<pre><code>{JSON.stringify(JSON.parse(this.props.jsonData), null, 4)}</code></pre>}
                     </div>
                 </div>
             </div>

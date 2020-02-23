@@ -7,19 +7,18 @@
     top: 0;
     overflow-x: hidden;
     padding-top: 10px;
-    overflow-y: scroll;
 }
   
 /* Control the left side */
 .left {
     left: 0;
-    background-color: #ffffff;
+    background-color: #292929;
 }
   
 /* Control the right side */
 .right {
     right: 0;
-    background-color: #888888;
+    background-color: #ffffff;
     overflow-y: scroll;
 }
   
@@ -36,4 +35,14 @@
 .centered img {
     width: 400px;
     height: relative;
+}
+
+pre {
+    overflow: auto;
+    background-color: #898989;
+    border: 1px solid #ffffff;
+    padding: 5px;
+    width: 100%;
+    max-height: 300px;
+    text-align: left;
 }
