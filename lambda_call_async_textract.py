@@ -1,5 +1,6 @@
 import json
 import boto3
+import uuid 
 
 def lambda_handler(event, context):
     # input - image in base64, or multipart form data
@@ -24,7 +25,7 @@ def lambda_handler(event, context):
                 # 'Version': 'string'
             }
         },
-        ClientRequestToken='Job' + key.replace('/', "_").replace('.', '_'),
+        ClientRequestToken='Job' + key.replace('/', "_").replace('.', '_') + str(uuid.uuid4()),
         JobTag='Job' + key.replace('/', "_").replace('.', '_'),
         NotificationChannel={
             'SNSTopicArn': 'arn:aws:sns:us-east-1:323226456632:AmazonTextractJob',
