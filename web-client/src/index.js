@@ -67,12 +67,10 @@ class UploadFileComponent extends React.Component {
                 }
 
             } else {
-                alert("Image file supported: '.png', '.jpg', '.jpeg'");
+                alert("File supported: '.png', '.jpg', '.jpeg', '.pdf'");
                 this.setState({});
             }
         } else {
-            // do nothing
-            // alert("Please upload a file.")
             this.setState({
                 inputFile: '',
                 inputFilePath: '',
