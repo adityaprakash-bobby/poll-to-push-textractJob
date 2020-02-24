@@ -128,9 +128,9 @@ class UploadFileComponent extends React.Component {
             bucket.getObject(params_get).promise()
                 .then((data) => {
                 this.setState({
-                    jsonData: String.fromCharCode.apply(null, data.Body)
+                    jsonData: Buffer.from(data.Body).toString('utf8')
                 });
-                console.log(String.fromCharCode.apply(null, data.Body));
+                // console.log(String.fromCharCode.apply(null, data.Body));
                 
             });
 
