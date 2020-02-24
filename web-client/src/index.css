@@ -19,7 +19,6 @@
 .right {
     right: 0;
     background-color: #ffffff;
-    overflow-y: scroll;
 }
   
 /* If you want the content centered horizontally and vertically */
@@ -33,7 +32,7 @@
   
 /* Style the image inside the centered container, if needed */
 .centered img {
-    width: 400px;
+    width: 600px;
     height: relative;
 }
 

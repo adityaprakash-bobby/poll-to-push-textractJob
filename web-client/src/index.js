@@ -37,36 +37,49 @@ class UploadFileComponent extends React.Component {
 
     handleInputFile(event) {
         
-        var _validFileExtensions = ["jpg", "jpeg", "png", "pdf"];
-        var fileUploadPath = event.target.value;
-        var fileExtension = fileUploadPath.substring(
-            fileUploadPath.lastIndexOf('.') + 1).toLowerCase();
-        var fileName = event.target.files[0]['name']
-        
-        
-        if (_validFileExtensions.includes(fileExtension)) {
-            this.setState({
-                inputFile: fileUploadPath
-            });
-    
-            let files = event.target.files;
-            // console.log(files);
+        if (event.target.files.length === 1) {
+            var _validFileExtensions = ["jpg", "jpeg", "png", "pdf"];
+            var fileUploadPath = event.target.value;
+            var fileExtension = fileUploadPath.substring(
+                fileUploadPath.lastIndexOf('.') + 1).toLowerCase();
+            console.log(event.target.files);
             
-            let reader = new FileReader();
-            reader.readAsDataURL(files[0]);
-    
-            reader.onload = (event) => {
+            var fileName = event.target.files[0]['name']
+            
+            
+            if (_validFileExtensions.includes(fileExtension)) {
                 this.setState({
-                    inputFilePath: URL.createObjectURL(files[0]),
-                    imageFile: files[0],
-                    inputFileName: fileName
+                    inputFile: fileUploadPath
                 });
-            }
+        
+                let files = event.target.files;
+                // console.log(files);
+                
+                let reader = new FileReader();
+                reader.readAsDataURL(files[0]);
+        
+                reader.onload = (event) => {
+                    this.setState({
+                        inputFilePath: URL.createObjectURL(files[0]),
+                        imageFile: files[0],
+                        inputFileName: fileName
+                    });
+                }
 
+            } else {
+                alert("Image file supported: '.png', '.jpg', '.jpeg'");
+                this.setState({});
+            }
         } else {
-            alert("Image file supported: '.png', '.jpg', '.jpeg'");
-            this.setState({});
-        }
+            // do nothing
+            // alert("Please upload a file.")
+            this.setState({
+                inputFile: '',
+                inputFilePath: '',
+                textarctJSON: '',
+                jsonData: ''
+            });
+        }   
         
     }
 
